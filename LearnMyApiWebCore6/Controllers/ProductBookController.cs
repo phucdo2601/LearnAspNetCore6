@@ -1,5 +1,6 @@
 ﻿using LearnMyApiWebCore6.Models;
 using LearnMyApiWebCore6.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,7 @@ namespace LearnMyApiWebCore6.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProductBookController : ControllerBase
     {
         private readonly IBookRepository _bookRepo;
