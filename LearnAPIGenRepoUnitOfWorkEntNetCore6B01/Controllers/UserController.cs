@@ -1,6 +1,8 @@
-﻿using LearnAPIGenRepoUnitOfWorkEntNetCore6B01.Interfaces;
+﻿using LearnAPIGenRepoUnitOfWorkEntNetCore6B01.DTOs.Responses;
+using LearnAPIGenRepoUnitOfWorkEntNetCore6B01.Interfaces;
 using LearnAPIGenRepoUnitOfWorkEntNetCore6B01.Models;
 using LearnAPIGenRepoUnitOfWorkEntNetCore6B01.Repositories;
+using LearnAPIGenRepoUnitOfWorkEntNetCore6B01.Services.UserService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,9 +12,12 @@ namespace LearnAPIGenRepoUnitOfWorkEntNetCore6B01.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        private readonly IUserService _userService;
+
         public UserController(IUnitOfWork unitOfWork)
         {
             UnitOfWork = unitOfWork;
+            _userService = new UserService(unitOfWork);
         }
 
         public IUnitOfWork UnitOfWork { get; }
@@ -63,6 +68,16 @@ namespace LearnAPIGenRepoUnitOfWorkEntNetCore6B01.Controllers
             UnitOfWork.UserRepository.Remove(user);
             UnitOfWork.SaveAsync();
             return Ok("Delete User Successfully!");
+        }
+
+        [HttpGet("user-service/GetAllUsers")]
+        public async Task<ActionResult> GetAllUserUsingSerivces()
+        {
+            var users = _userService.GetAllUser();
+
+            return users.Count >= 0 ? await Task.FromResult(StatusCode(StatusCodes.Status200OK, users)) 
+                : await Task.FromResult(StatusCode(StatusCodes.Status404NotFound, new Response { StatusCode = StatusCodes.Status404NotFound, Status = StatusResponse.Failed, Message = "Not found BasicSalarys" }));
+
         }
     }
 }
