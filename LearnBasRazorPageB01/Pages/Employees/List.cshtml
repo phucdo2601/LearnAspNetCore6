@@ -1,0 +1,37 @@
+﻿@page
+@model LearnBasRazorPageB01.Pages.Employees.ListModel
+@{
+}
+
+<h1 class="mb-3">List of Employees</h1>
+@if (Model.Employees != null && Model.Employees.Any())
+{
+        <table class="table">
+            <thead>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th></th>
+
+            </thead>
+            <tbody>
+            @foreach (var emp in Model.Employees)
+            {
+                        <tr>
+                            <td>@emp.Id</td>
+                             <td>@emp.Name</td>
+                             <td>@emp.Email</td>
+                             <td>
+                                 <a href="/Employees/Edit/@emp.Id" class="btn btn-dark">
+                                     Edit
+                                 </a>
+                             </td>
+                        </tr>
+            }
+            </tbody>
+        </table>
+}
+else
+{
+        <p>No Employees found!</p>
+}
